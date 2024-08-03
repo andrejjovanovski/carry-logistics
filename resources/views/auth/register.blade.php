@@ -47,6 +47,31 @@
                             <x-input-error :messages="$errors->get('gender')" class="mt-2"/>
                         </div>
 
+                        <!-- Phone number -->
+                        <div class="mt-4">
+                            <x-input-label for="phoneNumber" :value="__('Phone number')"/>
+                            <x-text-input id="phoneNumber" class="block mt-1 w-full" type="phoneNumber" name="phoneNumber"
+                                          :value="old('phoneNumber')"
+                                          type="text"
+                                          required
+                                          autocomplete="phoneNumber"/>
+                            <x-input-error :messages="$errors->get('phoneNumber')" class="mt-2"/>
+                        </div>
+
+                        <!-- Email Address -->
+                        <div class="mt-4">
+                            <x-input-label for="email" :value="__('Email')"/>
+                            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email"
+                                          :value="old('email')"
+                                          required
+                                          autocomplete="email"/>
+                            <x-input-error :messages="$errors->get('email')" class="mt-2"/>
+                        </div>
+
+
+                    </div>
+                    <div class="right-col">
+
                         <!-- Password -->
                         <div class="mt-4">
                             <x-input-label for="password" :value="__('Password')"/>
@@ -70,53 +95,54 @@
                             <x-input-error :messages="$errors->get('passwordConfirmation')" class="mt-2"/>
                         </div>
 
-                    </div>
-                    <div class="right-col">
-
-
-                        <!-- Email Address -->
+                        <!-- Country -->
                         <div class="mt-4">
-                            <x-input-label for="email" :value="__('Email')"/>
-                            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email"
-                                          :value="old('email')"
-                                          required
-                                          autocomplete="email"/>
-                            <x-input-error :messages="$errors->get('email')" class="mt-2"/>
-                        </div>
+                            <x-input-label for="country" :value="__('Country')"/>
 
-                        <!-- County -->
-                        <div class="mt-4">
-                            <x-input-label for="password_confirmation" :value="__('County')"/>
-
-                            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                                          type="password"
-                                          name="password_confirmation" required autocomplete="new-password"/>
+                            <x-select id="country" class="block mt-1 w-full"
+                                          name="country" required autocomplete="country">
+                                <x-slot name="content" id="country">
+                                    <option selected>Select country</option>
+                                    <option value="#">MK</option>
+                                    <option value="#">SRB</option>
+                                    <option value="#">D</option>
+                                </x-slot>
+                            </x-select>
 
                             <x-input-error :messages="$errors->get('passwordConfirmation')" class="mt-2"/>
                         </div>
 
-                        <!-- City -->
-                        <div class="mt-4">
-                            <x-input-label for="password_confirmation" :value="__('City')"/>
+                        {{--CITY AND ZIP CODE--}}
+                        <div class="flex mt-4 justify-between space-x-4">
+                            <!-- City -->
+                            <div class="w-3/4 justify-between inline-block">
+                                <x-input-label for="city" :value="__('City')"/>
 
-                            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                                          type="password"
-                                          name="password_confirmation" required autocomplete="new-password"/>
+                                <x-select id="city" class="mt-1 w-full"
+                                              name="city" required autocomplete="city">
+                                    <x-slot name="content" id="city">
+                                        <option selected>Select city</option>
+                                        <option value="#">MK</option>
+                                        <option value="#">SRB</option>
+                                        <option value="#">D</option>
+                                    </x-slot>
+                                </x-select>
 
-                            <x-input-error :messages="$errors->get('passwordConfirmation')" class="mt-2"/>
+                                <x-input-error :messages="$errors->get('passwordConfirmation')" class="mt-2"/>
+                            </div>
+
+                            <!-- Zip Code -->
+                            <div class="w-1/4 inline-block">
+                                <x-input-label for="zip-code" :value="__('Zip Code')"/>
+
+                                <x-text-input id="zip-code" class="mt-1 w-full"
+                                              type="password"
+                                              disabled
+                                              name="zip-code" required autocomplete="zip-code"/>
+
+                                <x-input-error :messages="$errors->get('passwordConfirmation')" class="mt-2"/>
+                            </div>
                         </div>
-
-                        <!-- Zip Code -->
-                        <div class="mt-4">
-                            <x-input-label for="password_confirmation" :value="__('Zip Code')"/>
-
-                            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                                          type="password"
-                                          name="password_confirmation" required autocomplete="new-password"/>
-
-                            <x-input-error :messages="$errors->get('passwordConfirmation')" class="mt-2"/>
-                        </div>
-
 
 
                         <!-- Address -->
@@ -132,7 +158,7 @@
 
 
                         <!-- Button -->
-                        <div class="d-flex items-center justify-center mt-6">
+                        <div class="d-flex items-center justify-center mt-11">
                             <x-primary-button class="w-full py-3">
                                 {{ __('Register') }}
                             </x-primary-button>
