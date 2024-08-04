@@ -9,7 +9,6 @@ use Spatie\Translatable\HasTranslations;
 
 class Area extends Model
 {
-    use SoftDeletes;
 
     protected $fillable = [
         'city_id',
