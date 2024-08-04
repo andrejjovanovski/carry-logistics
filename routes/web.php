@@ -8,7 +8,7 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::group(['middleware' => [ 'role:super-admin']], function () {
+Route::group(['middleware' => [ 'role:super-admin|user']], function () {
     Route::get('/dashboard', function (){
         return view('dashboard');
     })->name('dashboard');

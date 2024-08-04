@@ -9,7 +9,7 @@ use Spatie\Translatable\HasTranslations;
 
 class Country extends Model
 {
-    use SoftDeletes, HasTranslations;
+    use HasTranslations;
 
     protected $fillable = [
         'name',
