@@ -11,6 +11,9 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet"/>
 
+    {{--FontAwesome Icons--}}
+    <script src="https://kit.fontawesome.com/7cba051bd4.js" crossorigin="anonymous"></script>
+
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -24,7 +27,7 @@
     @include('layouts.sidebar')
 
     <div class="p-4 sm:ml-64">
-        <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg mt-14">
+        <div class="p-4 border-2 bg-gray-100 border-gray-200 border-dashed rounded-lg mt-14">
             {{--PAGE CONTENT HERE--}}
             {{ $slot }}
         </div>
