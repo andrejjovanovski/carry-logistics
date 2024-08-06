@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
             'area_id' => '1',
             'address' => 'Cvijanovacka 13, Belgrade',
             'password' => Hash::make('password'),
-        ])->assignRole('super-admin');;
+        ])->assignRole('super-admin');
         User::create([
             'name' => 'Leonardo Dimitrov',
             'email' => 'leonardo@carrylogistics.com',
@@ -44,6 +44,6 @@ class DatabaseSeeder extends Seeder
             'area_id' => '1',
             'address' => 'Gornje Mladenovica 3, Novi Sad',
             'password' => Hash::make('password'),
-        ])->assignRole('super-admin');;
+        ])->assignRole('super-admin');
     }
 }
