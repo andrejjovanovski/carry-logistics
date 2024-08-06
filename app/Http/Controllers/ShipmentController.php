@@ -13,7 +13,9 @@ class ShipmentController extends Controller
      */
     public function index()
     {
-        return view('shipment.index');
+        $shipments = Shipment::query()->get();
+
+        return view('shipment.index', compact('shipments'));
     }
 
     /**
@@ -21,7 +23,7 @@ class ShipmentController extends Controller
      */
     public function create()
     {
-        //
+        return view('shipment.create');
     }
 
     /**
@@ -29,7 +31,8 @@ class ShipmentController extends Controller
      */
     public function store(StoreShipmentRequest $request)
     {
-        //
+        Shipment::query()->create($request->all());
+        return redirect()->route('shipment.index');
     }
 
     /**

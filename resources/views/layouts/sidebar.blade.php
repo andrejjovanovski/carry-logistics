@@ -9,7 +9,7 @@
                 </x-nav-link>
             </li>
             <li>
-                <x-nav-link :href="route('shipment.index')" :active="request()->routeIs('shipment.index')">
+                <x-nav-link :href="route('shipment.index')" :active="request()->routeIs('shipment.index') || request()->routeIs('shipment.create')">
                     <i class="fa-solid fa-truck-fast text-blue-500"></i>
                     <span class="flex-1 ms-3 whitespace-nowrap">My orders</span>
                 </x-nav-link>

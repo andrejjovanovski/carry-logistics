@@ -22,6 +22,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/shipment', [ShipmentController::class, 'index'])->name('shipment.index');
+    Route::get('shipment/create', [ShipmentController::class, 'create'])->name('shipment.create');
+    Route::post('/shipment/store', [ShipmentController::class, 'store'])->name('shipment.store');
 });
 
 
