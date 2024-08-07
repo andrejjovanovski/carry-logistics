@@ -18,9 +18,8 @@
                                 <x-input-label for="name" :value="__('Full name')"/>
                                 <x-text-input id="name" class="block mt-1 w-full" type="text" name="name"
                                               :value="old('name')"
-                                              required
                                               autofocus autocomplete="name"/>
-                                <x-input-error :messages="$errors->get('fullName')" class="mt-2"/>
+                                <x-input-error :messages="$errors->get('name')" class="mt-2"/>
                             </div>
 
 
@@ -31,7 +30,7 @@
                                 <x-text-input id="date_of_birth" class="block mt-1 w-full"
                                               type="date"
                                               :value="old('date_of_birth')"
-                                              name="date_of_birth" required autocomplete="date_of_birth"/>
+                                              name="date_of_birth" autocomplete="date_of_birth"/>
                                 <x-input-error :messages="$errors->get('date_of_birth')" class="mt-2"/>
                             </div>
 
@@ -56,7 +55,6 @@
                                               name="phone_number"
                                               :value="old('phoneNumber')"
                                               type="text"
-                                              required
                                               autocomplete="phone_number"/>
                                 <x-input-error :messages="$errors->get('phone_number')" class="mt-2"/>
                             </div>
@@ -66,7 +64,6 @@
                                 <x-input-label for="email" :value="__('Email')"/>
                                 <x-text-input id="email" class="block mt-1 w-full" type="email" name="email"
                                               :value="old('email')"
-                                              required
                                               autocomplete="email"/>
                                 <x-input-error :messages="$errors->get('email')" class="mt-2"/>
                             </div>
@@ -80,7 +77,7 @@
                                 <x-text-input id="password" class="block mt-1 w-full"
                                               type="password"
                                               name="password"
-                                              required autocomplete="new-password"/>
+                                              autocomplete="new-password"/>
 
                                 <x-input-error :messages="$errors->get('password')" class="mt-2"/>
                             </div>
@@ -91,7 +88,7 @@
 
                                 <x-text-input id="password_confirmation" class="block mt-1 w-full"
                                               type="password"
-                                              name="password_confirmation" required autocomplete="new-password"/>
+                                              name="password_confirmation" autocomplete="new-password"/>
 
                                 <x-input-error :messages="$errors->get('passwordConfirmation')" class="mt-2"/>
                             </div>
@@ -114,8 +111,8 @@
                                 <div class="w-3/4 justify-between inline-block">
                                     <x-input-label for="city" :value="__('City')"/>
 
-                                    <x-select id="city" wire:model.live="cityID" class="mt-1 w-full"
-                                              name="city" required autocomplete="city">
+                                    <x-select id="city" wire:model.live="cityID"  class="mt-1 w-full"
+                                              name="city" autocomplete="city">
                                         <option selected>Options</option>
                                         <x-slot name="content" id="city">
                                             <option selected>Options</option>
@@ -135,7 +132,7 @@
                                                   type="text"
                                                   value="{{ $zipCode }}"
                                                   disabled
-                                                  name="zip-code" required autocomplete="zip-code"/>
+                                                  name="zip-code" autocomplete="zip-code"/>
 
                                     <x-input-error :messages="$errors->get('zip-code')" class="mt-2"/>
                                 </div>
@@ -144,7 +141,7 @@
                                 <x-input-label for='area' :value="__('Area')"/>
 
                                 <x-select id="area" wire:model.live="areaID" class="mt-1 w-full"
-                                          name="area" required autocomplete="area">
+                                          name="area" autocomplete="area">
 
                                     <x-slot name="content" id="area">
                                         @foreach($areas as $area)
@@ -161,7 +158,7 @@
                                 <x-text-input id="address" class="block mt-1 w-full"
                                               type="text"
                                               :value="old('address')"
-                                              name="address" required/>
+                                              name="address"/>
 
                                 <x-input-error :messages="$errors->get('address')" class="mt-2"/>
                             </div>
@@ -169,7 +166,7 @@
                     </div>
                     <!-- Button -->
                     <div class="d-flex items-center justify-center mt-11">
-                        <x-primary-button class="w-full py-3">
+                        <x-primary-button class="w-full py-3" type="submit">
                             {{ __('Register') }}
                         </x-primary-button>
                     </div>

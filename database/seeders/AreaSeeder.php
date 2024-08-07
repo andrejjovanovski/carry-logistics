@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Area;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class AreaSeeder extends Seeder
@@ -14,7 +13,6 @@ class AreaSeeder extends Seeder
     public function run(): void
     {
         $areas = [
-
 
             ['city_id' => '1', 'name' => 'Скопје нас. Горно Лисиче', 'zip_code' => '1000'],
             ['city_id' => '1', 'name' => 'Долно Лисиче ( Скопско )', 'zip_code' => '1050'],

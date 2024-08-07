@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreShipmentRequest;
 use App\Http\Requests\UpdateShipmentRequest;
 use App\Models\Shipment;
+use Illuminate\Support\Facades\Auth;
 
 class ShipmentController extends Controller
 {
@@ -13,7 +14,7 @@ class ShipmentController extends Controller
      */
     public function index()
     {
-        $shipments = Shipment::query()->get();
+        $shipments = Shipment::all();
 
         return view('shipment.index', compact('shipments'));
     }
@@ -23,7 +24,11 @@ class ShipmentController extends Controller
      */
     public function create()
     {
-        return view('shipment.create');
+        $loggedInUser = Auth::user();
+        $loggedInUserCity = $loggedInUser->city;
+        $loggedInUserArea = $loggedInUser->area;
+
+        return view('shipment.create', compact('loggedInUser', 'loggedInUserCity', 'loggedInUserArea'));
     }
 
     /**
@@ -32,6 +37,7 @@ class ShipmentController extends Controller
     public function store(StoreShipmentRequest $request)
     {
         Shipment::query()->create($request->all());
+
         return redirect()->route('shipment.index');
     }
 

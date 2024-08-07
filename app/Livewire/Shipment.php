@@ -4,16 +4,20 @@ namespace App\Livewire;
 
 use App\Models\Area;
 use App\Models\City;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
-class RegisterForm extends Component
+class Shipment extends Component
 {
     public $cityID;
 
     public $areaID;
 
     public $zipCode;
+
+    public $pickupName;
 
     public function updatedCityID(): void
     {
@@ -36,12 +40,13 @@ class RegisterForm extends Component
         return Area::where('city_id', $this->cityID)->get();
     }
 
-    #[Layout('layouts.guest')]
+    #[Layout('layouts.app')]
     public function render(): \Illuminate\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
     {
-        return view('livewire.register', [
+        return view('livewire.shipment', [
             'cities' => $this->cities,
             'areas' => $this->areas,
+            'pickupName' => User::query()->find(Auth::user()->name),
         ]);
     }
 }

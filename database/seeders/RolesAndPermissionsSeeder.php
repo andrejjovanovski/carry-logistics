@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -29,7 +28,6 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::create(['name' => 'create shipment']);
         Permission::create(['name' => 'calculate freight']);
 
-
         // Admin
         Permission::create(['name' => 'forcedelete shipments']);
         Permission::create(['name' => 'edit statuses']);
@@ -46,7 +44,7 @@ class RolesAndPermissionsSeeder extends Seeder
                 'edit shipment status',
                 'view shipments',
                 'create shipment',
-                'calculate freight'
+                'calculate freight',
             ]);
 
         Role::create(['name' => 'user'])
@@ -54,7 +52,7 @@ class RolesAndPermissionsSeeder extends Seeder
                 'cancel shipment',
                 'view shipments',
                 'create shipment',
-                'calculate freight'
+                'calculate freight',
             ]);
 
         Role::create(['name' => 'courier'])
@@ -63,10 +61,7 @@ class RolesAndPermissionsSeeder extends Seeder
                 'edit shipment status',
             ]);
 
-
-
         Role::create(['name' => 'super-admin'])->givePermissionTo(Permission::all());
-
 
     }
 }
