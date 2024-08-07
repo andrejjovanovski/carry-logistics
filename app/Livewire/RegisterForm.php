@@ -9,8 +9,24 @@ use Livewire\Component;
 
 class RegisterForm extends Component
 {
+    public $name;
+
+    public $email;
+
+    public $gender;
+
+    public $date_of_birth;
+
+    public $phone_number;
+
+    public $address;
+
+    public $password;
+
     public $cityID;
+
     public $areaID;
+
     public $zipCode;
 
     public function updatedCityID(): void
@@ -33,6 +49,7 @@ class RegisterForm extends Component
     {
         return Area::where('city_id', $this->cityID)->get();
     }
+
     #[Layout('layouts.guest')]
     public function render(): \Illuminate\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
     {
@@ -42,4 +59,3 @@ class RegisterForm extends Component
         ]);
     }
 }
-

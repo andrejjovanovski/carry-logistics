@@ -18,9 +18,9 @@
                                 <x-input-label for="name" :value="__('Full name')"/>
                                 <x-text-input id="name" class="block mt-1 w-full" type="text" name="name"
                                               :value="old('name')"
-                                              required
+                                              wire:model.live="name"
                                               autofocus autocomplete="name"/>
-                                <x-input-error :messages="$errors->get('fullName')" class="mt-2"/>
+                                <x-input-error :messages="$errors->get('name')" class="mt-2"/>
                             </div>
 
 
@@ -30,15 +30,16 @@
 
                                 <x-text-input id="date_of_birth" class="block mt-1 w-full"
                                               type="date"
+                                              wire:model.live="date_of_birth"
                                               :value="old('date_of_birth')"
-                                              name="date_of_birth" required autocomplete="date_of_birth"/>
+                                              name="date_of_birth" autocomplete="date_of_birth"/>
                                 <x-input-error :messages="$errors->get('date_of_birth')" class="mt-2"/>
                             </div>
 
                             <!-- Gender -->
                             <div class="mt-4">
                                 <x-input-label for="gender" :value="__('Gender')"/>
-                                <x-select id="gender" name="gender">
+                                <x-select wire:model.live="gender" id="gender" name="gender">
                                     <x-slot name="content" id="gender">
                                         <option value="" selected>Select gender</option>
                                         <option value="male">Male</option>
@@ -52,11 +53,10 @@
                             <!-- Phone number -->
                             <div class="mt-4">
                                 <x-input-label for="phone_number" :value="__('Phone number')"/>
-                                <x-text-input id="phone_number" class="block mt-1 w-full"
+                                <x-text-input id="phone_number" wire:model.live="phone_number" class="block mt-1 w-full"
                                               name="phone_number"
                                               :value="old('phoneNumber')"
                                               type="text"
-                                              required
                                               autocomplete="phone_number"/>
                                 <x-input-error :messages="$errors->get('phone_number')" class="mt-2"/>
                             </div>
@@ -64,9 +64,8 @@
                             <!-- Email Address -->
                             <div class="mt-4">
                                 <x-input-label for="email" :value="__('Email')"/>
-                                <x-text-input id="email" class="block mt-1 w-full" type="email" name="email"
+                                <x-text-input id="email" class="block mt-1 w-full" wire:model.live="email" type="email" name="email"
                                               :value="old('email')"
-                                              required
                                               autocomplete="email"/>
                                 <x-input-error :messages="$errors->get('email')" class="mt-2"/>
                             </div>
@@ -79,8 +78,9 @@
 
                                 <x-text-input id="password" class="block mt-1 w-full"
                                               type="password"
+                                              wire:model.live="password"
                                               name="password"
-                                              required autocomplete="new-password"/>
+                                              autocomplete="new-password"/>
 
                                 <x-input-error :messages="$errors->get('password')" class="mt-2"/>
                             </div>
@@ -91,7 +91,8 @@
 
                                 <x-text-input id="password_confirmation" class="block mt-1 w-full"
                                               type="password"
-                                              name="password_confirmation" required autocomplete="new-password"/>
+                                              wire:model.live="password_confirmation"
+                                              name="password_confirmation" autocomplete="new-password"/>
 
                                 <x-input-error :messages="$errors->get('passwordConfirmation')" class="mt-2"/>
                             </div>
@@ -114,9 +115,8 @@
                                 <div class="w-3/4 justify-between inline-block">
                                     <x-input-label for="city" :value="__('City')"/>
 
-                                    <x-select id="city" wire:model.live="cityID" class="mt-1 w-full"
-                                              name="city" required autocomplete="city">
-                                        <option selected>Options</option>
+                                    <x-select id="city" wire:model.live.debounce.500ms="cityID" class="mt-1 w-full"
+                                              name="city" autocomplete="city">
                                         <x-slot name="content" id="city">
                                             <option selected>Options</option>
                                             @foreach($cities as $city)
@@ -135,7 +135,7 @@
                                                   type="text"
                                                   value="{{ $zipCode }}"
                                                   disabled
-                                                  name="zip-code" required autocomplete="zip-code"/>
+                                                  name="zip-code" autocomplete="zip-code"/>
 
                                     <x-input-error :messages="$errors->get('zip-code')" class="mt-2"/>
                                 </div>
@@ -143,8 +143,8 @@
                             <div class="mt-4">
                                 <x-input-label for='area' :value="__('Area')"/>
 
-                                <x-select id="area" wire:model.live="areaID" class="mt-1 w-full"
-                                          name="area" required autocomplete="area">
+                                <x-select id="area" wire:model.live.debounce.500ms="areaID" class="mt-1 w-full"
+                                          name="area" autocomplete="area">
 
                                     <x-slot name="content" id="area">
                                         @foreach($areas as $area)
@@ -160,8 +160,9 @@
 
                                 <x-text-input id="address" class="block mt-1 w-full"
                                               type="text"
+                                              wire:model.live="address"
                                               :value="old('address')"
-                                              name="address" required/>
+                                              name="address"/>
 
                                 <x-input-error :messages="$errors->get('address')" class="mt-2"/>
                             </div>

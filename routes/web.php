@@ -1,20 +1,20 @@
 <?php
 
-use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShipmentController;
+use App\Http\Controllers\TrackingController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::group(['middleware' => [ 'role:super-admin|user']], function () {
-    Route::get('/dashboard', function (){
+Route::group(['middleware' => ['role:super-admin|user']], function () {
+    Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+    Route::get('/tracking', [TrackingController::class, 'index'])->name('tracking.index');
 });
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -25,6 +25,5 @@ Route::middleware('auth')->group(function () {
     Route::get('shipment/create', [ShipmentController::class, 'create'])->name('shipment.create');
     Route::post('/shipment/store', [ShipmentController::class, 'store'])->name('shipment.store');
 });
-
 
 require __DIR__.'/auth.php';

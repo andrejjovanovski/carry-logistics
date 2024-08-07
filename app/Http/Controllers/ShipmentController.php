@@ -32,6 +32,7 @@ class ShipmentController extends Controller
     public function store(StoreShipmentRequest $request)
     {
         Shipment::query()->create($request->all());
+
         return redirect()->route('shipment.index');
     }
 
