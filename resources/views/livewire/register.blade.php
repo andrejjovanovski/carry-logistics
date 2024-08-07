@@ -170,7 +170,7 @@
                     </div>
                     <!-- Button -->
                     <div class="d-flex items-center justify-center mt-11">
-                        <x-primary-button class="w-full py-3">
+                        <x-primary-button class="w-full py-3" type="submit">
                             {{ __('Register') }}
                         </x-primary-button>
                     </div>
