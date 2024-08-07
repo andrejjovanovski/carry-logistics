@@ -32,10 +32,7 @@
                 <x-primary-nav-button class="block mx-auto mt-3" href="{{route('shipment.create')}}">
                     {{__('+ shipment')}}
                 </x-primary-nav-button>
-
-
             </div>
-
         </div>
 
     </div>

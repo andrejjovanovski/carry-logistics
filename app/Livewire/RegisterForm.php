@@ -9,6 +9,20 @@ use Livewire\Component;
 
 class RegisterForm extends Component
 {
+    public $name;
+
+    public $email;
+
+    public $gender;
+
+    public $date_of_birth;
+
+    public $phone_number;
+
+    public $address;
+
+    public $password;
+
     public $cityID;
 
     public $areaID;
