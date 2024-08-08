@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\Auth;
 
 class ShipmentController extends Controller
 {
+    public $contacts;
+
+    public function mount()
+    {
+        $contacts = Auth::user()->contacts;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -24,11 +31,7 @@ class ShipmentController extends Controller
      */
     public function create()
     {
-        $loggedInUser = Auth::user();
-        $loggedInUserCity = $loggedInUser->city;
-        $loggedInUserArea = $loggedInUser->area;
-
-        return view('shipment.create', compact('loggedInUser', 'loggedInUserCity', 'loggedInUserArea'));
+        return view('shipment.create');
     }
 
     /**
@@ -36,6 +39,7 @@ class ShipmentController extends Controller
      */
     public function store(StoreShipmentRequest $request)
     {
+
         Shipment::query()->create($request->all());
 
         return redirect()->route('shipment.index');

@@ -1,6 +1,6 @@
 <div>
-
-    <form method="POST" action="{{ route('shipment.store') }}">
+    {{--    {{dd($contacts)}}--}}
+    <form wire:submit.prevent="submit" method="POST" action="{{ route('shipment.store') }}">
         @csrf
         <h3 class="font-semibold text-xl mb-3 bg-white inline-block px-6 py-2 rounded-lg"><i
                 class="fa-solid fa-plus text-blue-500 mr-2"></i>Book a shipment</h3>
@@ -9,64 +9,66 @@
             {{--PICKUP COLUMN--}}
             <div class="left-col shadow-md bg-white px-3 py-4 rounded-lg">
                 <p class="border-b border-gray-300 text-gray-400">Pickup Information</p>
-                <!-- Note for pickup driver -->
+                <!-- Pickup name -->
                 <div class="mt-4">
                     <x-input-label for="gender" :value="__('Pickup name')"/>
-                    <x-select id="gender"> <!-- Default selected value should be the logged in user -->
+                    <x-select id="gender" name="pickup_name">
                         <x-slot name="content" id="gender">
-                            <option value="{{ Auth::user()->id }}" selected>{{ Auth::user()->name }}, {{ Auth::user()->city->name }}, {{ Auth::user()->area->name }}, {{ Auth::user()->area->zip_code }}</option>
+{{--                            <option value="{{ Auth::user()->id }}" selected>{{ Auth::user()->name }}--}}
+{{--                                , {{ Auth::user()->address }}, {{ Auth::user()->area->name }}--}}
+{{--                                , {{ Auth::user()->area->zip_code }}, {{ Auth::user()->city->name }}</option>--}}
+                            @foreach($contacts as $contact)
+                                <option value="{{ $contact->id }}">{{ $contact->name }}
+                                    , {{ $contact->street_address }}, {{ $contact->area->name }}
+                                    , {{ $contact->area->zip_code }}, {{ $contact->city->name }}</option>
+                            @endforeach
                         </x-slot>
                     </x-select>
-                    <x-input-error :messages="$errors->get('gender')" class="mt-2"/>
+                    <x-input-error :messages="$errors->get('pickup_name')" class="mt-2"/>
                 </div>
 
-                <!-- Delivery Name -->
+                <!-- Delivery reference -->
                 <div class="mt-4">
-                    <x-input-label for="name" :value="__('Delivery refernce')"/>
-                    <x-text-input id="name" class="block mt-1 w-full" type="text" name="full-name"
-                                  :value="old('name')"
-                                  required
-                                  autofocus autocomplete="name"/>
-                    <x-input-error :messages="$errors->get('fullName')" class="mt-2"/>
+                    <x-input-label for="deliveryReference" :value="__('Delivery reference')"/>
+                    <x-text-input id="deliveryReference" class="block mt-1 w-full" type="text" name="delivery_reference"
+                                  :value="old('delivery_reference')"
+                                  autofocus autocomplete="deliveryReference"/>
+                    <x-input-error :messages="$errors->get('delivery_reference')" class="mt-2"/>
                 </div>
 
                 <p class="border-b border-gray-300 text-gray-400 mt-4">Collection window</p>
                 <div class="flex mt-4 justify-between space-x-4">
-                    <!-- Pickup date-time -->
+                    <!-- Pickup date -->
                     <div class="w-3/4 justify-between inline-block">
-                        {{--                            <x-input-label for="dateOfBirth" :value="__('Pickup delivery date')"/>--}}
 
-                        <x-text-input id="dateOfBirth" class="block mt-1 w-full"
+                        <x-text-input id="pickupDate" class="block mt-1 w-full"
                                       type="date"
-                                      name="dateOfBirth" required autocomplete="new-dateOfBirth"/>
-                        <x-input-error :messages="$errors->get('dateOfBirth')" class="mt-2"/>
+                                      name="pickup_date" autocomplete="pickupDate"/>
+                        <x-input-error :messages="$errors->get('pickup_date')" class="mt-2"/>
                     </div>
-                    <!-- Pickup date-time -->
+                    <!-- Pickup time -->
                     <div class="w-3/4 justify-between inline-block">
-                        {{--                            <x-input-label for="dateOfBirth" :value="__('Pickup time')"/>--}}
 
-                        <x-text-input id="dateOfBirth" class="block mt-1 w-full"
+                        <x-text-input id="pickupTimeOne" class="block mt-1 w-full"
                                       type="time"
-                                      name="dateOfBirth" required autocomplete="new-dateOfBirth"/>
-                        <x-input-error :messages="$errors->get('dateOfBirth')" class="mt-2"/>
+                                      name="pickup_time_one" autocomplete="pickupTimeOne"/>
+                        <x-input-error :messages="$errors->get('pickup_time_one')" class="mt-2"/>
                     </div>
-                    <!-- Pickup date-time -->
+                    <!-- Pickup time -->
                     <div class="w-3/4 justify-between inline-block">
-                        {{--                            <x-input-label for="dateOfBirth" :value="__('Pickup time')"/>--}}
 
-                        <x-text-input id="dateOfBirth" class="block mt-1 w-full"
+                        <x-text-input id="pickupTimeTwo" class="block mt-1 w-full"
                                       type="time"
-                                      name="dateOfBirth" required autocomplete="new-dateOfBirth"/>
-                        <x-input-error :messages="$errors->get('dateOfBirth')" class="mt-2"/>
+                                      name="pickup_time_two" autocomplete="pickupTimeTwo"/>
+                        <x-input-error :messages="$errors->get('pickup_time_two')" class="mt-2"/>
                     </div>
                 </div>
 
                 <!-- Note for pickup driver -->
                 <div class="mt-4">
                     <x-input-label for="gender" :value="__('Note for pickup driver')"/>
-                    <x-text-input id="note-for-pickup-driver" type="text">
-                    </x-text-input>
-                    <x-input-error :messages="$errors->get('gender')" class="mt-2"/>
+                    <x-text-input id="pickupDriverNote" name="pickup-driver-note" type="text" autocomplete="pickupDriverNote"/>
+                    <x-input-error :messages="$errors->get('pickup-driver-note')" class="mt-2"/>
                 </div>
             </div>
 
@@ -78,32 +80,30 @@
                 <div class="flex mt-4 justify-between space-x-4">
                     <!-- Delivery Name -->
                     <div class="w-3/4 justify-between inline-block">
-                        <x-input-label for="name" :value="__('Delivery name')"/>
-                        <x-text-input id="name" class="block mt-1 w-full" type="text" name="full-name"
-                                      :value="old('name')"
-                                      required
-                                      autofocus autocomplete="name"/>
-                        <x-input-error :messages="$errors->get('fullName')" class="mt-2"/>
+                        <x-input-label for="deliveryName" :value="__('Delivery name')"/>
+                        <x-text-input id="deliveryName" class="block mt-1 w-full" type="text" name="delivery_name"
+                                      :value="old('delivery_name')"
+                                      autofocus autocomplete="deliveryName"/>
+                        <x-input-error :messages="$errors->get('delivery_name')" class="mt-2"/>
                     </div>
                     <!-- Phone number -->
                     <div class="w-3/4 justify-between inline-block">
-                        <x-input-label for="phoneNumber" :value="__('Delivery phone number')"/>
-                        <x-text-input id="phoneNumber" class="block mt-1 w-full" type="phoneNumber"
-                                      name="phoneNumber"
-                                      :value="old('phoneNumber')"
+                        <x-input-label for="deliveryPhoneNumber" :value="__('Delivery phone number')"/>
+                        <x-text-input id="deliveryPhoneNumber" class="block mt-1 w-full" type="text"
+                                      name="delivery_phone_number"
+                                      :value="old('delivery_phone_number')"
                                       type="text"
-                                      required
                                       autocomplete="phoneNumber"/>
-                        <x-input-error :messages="$errors->get('phoneNumber')" class="mt-2"/>
+                        <x-input-error :messages="$errors->get('delivery_phone_number')" class="mt-2"/>
                     </div>
                 </div>
 
                 <!-- Delivery country -->
                 <div class="mt-4">
-                    <x-input-label for="country" :value="__('Delivery country')"/>
+                    <x-input-label for="deliveryCountry" :value="__('Delivery country')"/>
 
-                    <x-select id="country" class="block mt-1 w-full"
-                              name="country" required autocomplete="country" disabled>
+                    <x-select id="deliveryCountry" class="block mt-1 w-full"
+                              name="delivery_country" autocomplete="deliveryCountry" disabled>
                         <x-slot name="content" id="country">
                             <option value="128" selected>Macedonia</option>
                         </x-slot>
@@ -115,10 +115,10 @@
                 <div class="flex mt-4 justify-between space-x-4">
                     <!-- City -->
                     <div class="w-3/4 justify-between inline-block">
-                        <x-input-label for="city" :value="__('City')"/>
+                        <x-input-label for="deliveryCity" :value="__('City')"/>
 
-                        <x-select id="city" wire:model.live="cityID" class="mt-1 w-full"
-                                  name="city" required autocomplete="city">
+                        <x-select id="deliveryCity" wire:model.live="cityID" class="mt-1 w-full"
+                                  name="delivery_city" autocomplete="city">
                             <option selected>Options</option>
                             <x-slot name="content" id="city">
                                 <option selected>Options</option>
@@ -128,15 +128,15 @@
                             </x-slot>
                         </x-select>
 
-                        <x-input-error :messages="$errors->get('city')" class="mt-2"/>
+                        <x-input-error :messages="$errors->get('delivery_city')" class="mt-2"/>
                     </div>
 
                     <!-- Area -->
                     <div class="w-3/4 justify-between inline-block">
-                        <x-input-label for='area' :value="__('Area')"/>
+                        <x-input-label for='deliveryArea' :value="__('Area')"/>
 
-                        <x-select id="area" wire:model.live="areaID" class="mt-1 w-full"
-                                  name="area" required autocomplete="area">
+                        <x-select id="deliveryArea" wire:model.live="areaID" class="mt-1 w-full"
+                                  name="delivery_area" autocomplete="area">
 
                             <x-slot name="content" id="area">
                                 @foreach($areas as $area)
@@ -145,7 +145,7 @@
                             </x-slot>
                         </x-select>
 
-                        <x-input-error :messages="$errors->get('area')" class="mt-2"/>
+                        <x-input-error :messages="$errors->get('delivery_area')" class="mt-2"/>
                     </div>
 
                     <!-- Zip Code -->
@@ -156,7 +156,7 @@
                                       type="text"
                                       value="{{ $zipCode }}"
                                       disabled
-                                      name="zip-code" required autocomplete="zip-code"/>
+                                      name="zip-code" autocomplete="zip-code"/>
 
                         <x-input-error :messages="$errors->get('zip-code')" class="mt-2"/>
                     </div>
@@ -164,145 +164,188 @@
 
                 <!-- Delivery Address -->
                 <div class="mt-4">
-                    <x-input-label for="password_confirmation" :value="__('Delivery address')"/>
+                    <x-input-label for="deliveryAddress" :value="__('Delivery address')"/>
 
-                    <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                                  type="password"
-                                  name="password_confirmation" required autocomplete="new-password"/>
+                    <x-text-input id="deliveryAddress" class="block mt-1 w-full"
+                                  type="text"
+                                  name="delivery_address" autocomplete="deliveryAddress"/>
 
-                    <x-input-error :messages="$errors->get('passwordConfirmation')" class="mt-2"/>
+                    <x-input-error :messages="$errors->get('delivery_address')" class="mt-2"/>
                 </div>
 
-                <p class="border-b border-gray-300 text-gray-400 mt-4">Delivery window</p>
-                <div class="flex mt-4 justify-between space-x-4">
-                    <!-- Pickup date-time -->
-                    <div class="w-3/4 justify-between inline-block">
-                        {{--                            <x-input-label for="dateOfBirth" :value="__('Pickup delivery date')"/>--}}
+{{--                <p class="border-b border-gray-300 text-gray-400 mt-4">Delivery window</p>--}}
+{{--                <div class="flex mt-4 justify-between space-x-4">--}}
+{{--                    <!-- Pickup date-time -->--}}
+{{--                    <div class="w-3/4 justify-between inline-block">--}}
 
-                        <x-text-input id="dateOfBirth" class="block mt-1 w-full"
-                                      type="date"
-                                      name="dateOfBirth" required autocomplete="new-dateOfBirth"/>
-                        <x-input-error :messages="$errors->get('dateOfBirth')" class="mt-2"/>
-                    </div>
-                    <!-- Pickup date-time -->
-                    <div class="w-3/4 justify-between inline-block">
-                        {{--                            <x-input-label for="dateOfBirth" :value="__('Pickup time')"/>--}}
+{{--                        <x-text-input id="deliveryDate" class="block mt-1 w-full"--}}
+{{--                                      type="date"--}}
+{{--                                      name="delivery_date" autocomplete="deliveryDate"/>--}}
+{{--                        <x-input-error :messages="$errors->get('delivery_date')" class="mt-2"/>--}}
+{{--                    </div>--}}
+{{--                    <!-- Pickup date-time -->--}}
+{{--                    <div class="w-3/4 justify-between inline-block">--}}
 
-                        <x-text-input id="dateOfBirth" class="block mt-1 w-full"
-                                      type="time"
-                                      name="dateOfBirth" required autocomplete="new-dateOfBirth"/>
-                        <x-input-error :messages="$errors->get('dateOfBirth')" class="mt-2"/>
-                    </div>
-                    <!-- Pickup date-time -->
-                    <div class="w-3/4 justify-between inline-block">
-                        {{--                            <x-input-label for="dateOfBirth" :value="__('Pickup time')"/>--}}
+{{--                        <x-text-input id="deliveryTimeOne" class="block mt-1 w-full"--}}
+{{--                                      type="time"--}}
+{{--                                      name="delivery_time_one" autocomplete="deliveryTimeOne"/>--}}
+{{--                        <x-input-error :messages="$errors->get('delivery_time_one')" class="mt-2"/>--}}
+{{--                    </div>--}}
+{{--                    <!-- Pickup date-time -->--}}
+{{--                    <div class="w-3/4 justify-between inline-block">--}}
 
-                        <x-text-input id="dateOfBirth" class="block mt-1 w-full"
-                                      type="time"
-                                      name="dateOfBirth" required autocomplete="new-dateOfBirth"/>
-                        <x-input-error :messages="$errors->get('dateOfBirth')" class="mt-2"/>
-                    </div>
-                </div>
+{{--                        <x-text-input id="deliveryTimeTwo" class="block mt-1 w-full"--}}
+{{--                                      type="time"--}}
+{{--                                      name="delivery_time_two" autocomplete="deliveryTimeTwo"/>--}}
+{{--                        <x-input-error :messages="$errors->get('delivery_time_two')" class="mt-2"/>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
 
-                <!-- Delivery notes -->
+                <!-- Delivery note -->
                 <div class="mt-4">
-                    <x-input-label for="gender" :value="__('Delivery notes')"/>
-                    <x-select id="gender">
-                        <x-slot name="content" id="gender">
-                            <option selected>Select gender</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="rather-not-say">Rather not say</option>
-                        </x-slot>
-                    </x-select>
-                    <x-input-error :messages="$errors->get('gender')" class="mt-2"/>
+                    <x-input-label for="deliveryNote" :value="__('Delivery note')"/>
+                    <x-text-input id="deliveryNote" name="delivery_note" class="block mt-1 w-full"/>
+
+                    <x-input-error :messages="$errors->get('delivery_note')" class="mt-2"/>
                 </div>
             </div>
         </div>
 
-        <!--TODO: PACKAGES (JS FOR ADD NEW PACKAGE AND TRACK THE NUMBER IN THE TAG CIRCLE NEXT TO PACKAGES HEADING) -->
+        <!-- PACKAGES -->
         <div class="col shadow-md bg-white px-3 py-4 rounded-lg mt-6">
             <div class="border-b border-gray-300 text-gray-400">
                 <p class="inline-block">Packages</p>
                 <span
-                    class="inline-flex items-center justify-center px-2 m2-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full">1</span>
+                    class="inline-flex items-center justify-center px-2 m2-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full">{{$totalPackages}}</span>
             </div>
 
-            {{--PICKUP AREA AND ZIP CODE--}}
-            <div class="flex mt-4 content-center items-end justify-between space-x-4">
-                <!-- Description -->
-                <div class="w-10/12 inline-block">
-                    <x-input-label for="phoneNumber" :value="__('Description')"/>
-                    <x-text-input id="phoneNumber" class="block mt-1 w-full" type="phoneNumber"
-                                  name="phoneNumber"
-                                  :value="old('phoneNumber')"
-                                  type="text"
-                                  required
-                                  autocomplete="phoneNumber"/>
-                    <x-input-error :messages="$errors->get('phoneNumber')" class="mt-2"/>
+            {{--Packages--}}
+            @foreach($packages as $index => $package)
+                <div class="flex mt-4 content-center items-end justify-between space-x-4">
+                    <!-- Description -->
+                    <div class="w-10/12 inline-block">
+                        <x-input-label for="packages.{$index}.description" :value="__('Description')"/>
+                        <x-text-input id="description{{$index}}" class="block mt-1 w-full" type="text"
+                                      name="packages.{{$index}}.description"
+                                      :value="old('description{{$index}}')"
+                                      type="text"
+                                    wire:model="packages.{{$index}}.description"/>
+                        <x-input-error :messages="$errors->get('packages.{{$index}}.description')" class="mt-2"/>
+{{--                        @error('packages.' . $index . '.description')--}}
+{{--                        <span class="text-red-600">{{ $message }}</span>--}}
+{{--                        @enderror--}}
+                    </div>
+
+                    <!-- Weight -->
+                    <div class="w-2/12 inline-block">
+                        <x-input-label for="weight{{$index}}" :value="__('Weight (kg)')"/>
+
+                        <x-text-input id="weight{{$index}}" class="mt-1 w-full"
+                                      type="text"
+                                      name="weight{{$index}}"/>
+
+                        <x-input-error :messages="$errors->get('weight{{$index}}')" class="mt-2"/>
+                    </div>
+
+                    <!-- Length -->
+                    <div class="w-2/12 inline-block">
+                        <x-input-label for="length{{$index}}" :value="__('Length (cm)')"/>
+
+                        <x-text-input id="length{{$index}}" class="mt-1 w-full"
+                                      type="text"
+                                      name="length{{$index}}"/>
+
+                        <x-input-error :messages="$errors->get('length{{$index}}')" class="mt-2"/>
+                    </div>
+
+                    <!-- Width -->
+                    <div class="w-2/12 inline-block">
+                        <x-input-label for="width{{$index}}" :value="__('Width (cm)')"/>
+
+                        <x-text-input id="width{{$index}}" class="mt-1 w-full"
+                                      type="text"
+                                      name="width{{$index}}"/>
+
+                        <x-input-error :messages="$errors->get('width{{$index}}')" class="mt-2"/>
+                    </div>
+
+                    <!-- Height -->
+                    <div class="w-2/12 inline-block">
+                        <x-input-label for="height{{$index}}" :value="__('Height (cm)')"/>
+
+                        <x-text-input id="height{{$index}}" class="mt-1 w-full"
+                                      type="text"
+                                      name="height{{$index}}"/>
+
+                        <x-input-error :messages="$errors->get('height{{$index}}')" class="mt-2"/>
+                    </div>
+                    <div class="w-1/12 inline-block align-baseline text-center">
+                        <button wire:click.prevent="deletePackage({{$index}})" type="button" class="text-gray-400 hover:text-gray-600">
+                            <i class="fa-solid fa-trash pb-2 text-2xl"></i>
+                        </button>
+                    </div>
                 </div>
+            @endforeach
 
-                <!-- Zip Code -->
-                <div class="w-2/12 inline-block">
-                    <x-input-label for="zip-code" :value="__('Weight (kg)')"/>
-
-                    <x-text-input id="zip-code" class="mt-1 w-full"
-                                  type="text"
-                                  name="zip-code" required autocomplete="zip-code"/>
-
-                    <x-input-error :messages="$errors->get('passwordConfirmation')" class="mt-2"/>
-                </div>
-
-                <!-- Zip Code -->
-                <div class="w-2/12 inline-block">
-                    <x-input-label for="zip-code" :value="__('Length (cm)')"/>
-
-                    <x-text-input id="zip-code" class="mt-1 w-full"
-                                  type="password"
-                                  name="zip-code" required autocomplete="zip-code"/>
-
-                    <x-input-error :messages="$errors->get('passwordConfirmation')" class="mt-2"/>
-                </div>
-
-                <!-- Zip Code -->
-                <div class="w-2/12 inline-block">
-                    <x-input-label for="zip-code" :value="__('Width (cm)')"/>
-
-                    <x-text-input id="zip-code" class="mt-1 w-full"
-                                  type="password"
-                                  name="zip-code" required autocomplete="zip-code"/>
-
-                    <x-input-error :messages="$errors->get('passwordConfirmation')" class="mt-2"/>
-                </div>
-
-                <!-- Zip Code -->
-                <div class="w-2/12 inline-block">
-                    <x-input-label for="zip-code" :value="__('Height (cm)')"/>
-
-                    <x-text-input id="zip-code" class="mt-1 w-full"
-                                  type="password"
-                                  name="zip-code" required autocomplete="zip-code"/>
-
-                    <x-input-error :messages="$errors->get('passwordConfirmation')" class="mt-2"/>
-                </div>
-                <div class="w-1/12 inline-block align-baseline text-center">
-                    <button type="button" class="text-gray-400 hover:text-gray-600">
-                        <i class="fa-solid fa-trash pb-2 text-2xl"></i>
-                    </button>
-                </div>
-            </div>
 
             <div class="border-t border-gray-300 text-gray-400 mt-6 pt-2">
-                <button class="hover:text-gray-600" type="button">
+                <button wire:click.prevent="addNewPackage" class="hover:text-gray-600" type="button">
                     <i class="fa-solid fa-plus mr-1"></i>
                     Add new package
                 </button>
             </div>
         </div>
 
+
+        {{--PAYMENT METHOD, SHIPPING TYPE--}}
+        <div class="col shadow-md bg-white px-3 py-4 rounded-lg mt-6">
+            <div class="border-b border-gray-300 text-gray-400">
+                <p class="inline-block">Shipment services</p>
+            </div>
+            <div class="flex mt-4 content-center items-end justify-between space-x-4">
+            {{--Shipment type--}}
+                <div class="w-3/4 justify-between inline-block">
+                    <x-input-label for='shipmentType' :value="__('Shipment type')"/>
+
+                    <x-select id="shipmentType" class="mt-1 w-full"
+                              name="shipment_type_id">
+
+                        <x-slot name="content" id="shipmentType">
+{{--                            @foreach($shipmentTypes as $type)--}}
+{{--                                <option value=""></option>--}}
+{{--                            @endforeach--}}
+                        </x-slot>
+                    </x-select>
+
+                    <x-input-error :messages="$errors->get('shipment_type_id')" class="mt-2"/>
+                </div>
+
+                {{--Payment method--}}
+                <div class="w-3/4 justify-between inline-block">
+                    <x-input-label for='paymentMethod' :value="__('Payment method')"/>
+
+                    <x-select id="paymentMethod" class="mt-1 w-full"
+                              name="payment_method_id">
+
+                        <x-slot name="content" id="paymentMethod">
+                            {{--                            @foreach($shipmentTypes as $type)--}}
+                            {{--                                <option value=""></option>--}}
+                            {{--                            @endforeach--}}
+                        </x-slot>
+                    </x-select>
+
+                    <x-input-error :messages="$errors->get('payment_method_id')" class="mt-2"/>
+                </div>
+
+            </div>
+            <div class="w-full justify-between block text-center mt-6">
+                <p class="font-semibold text-2xl">TOTAL: $1023</p>
+            </div>
+        </div>
+
         <!-- Button -->
         <div class="d-flex items-center justify-center mt-6">
-            <x-primary-button class="w-full py-3">
+            <x-primary-button wire:click.prevent="submit" class="w-full py-3">
                 {{ __('Book shipment') }}
             </x-primary-button>
         </div>

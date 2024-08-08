@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Address;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -38,13 +39,21 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'gender' => $request->gender,
             'date_of_birth' => $request->date_of_birth,
-            'phone_number' => $request->phone_number,
-            'country_id' => '128',
-            'city_id' => $request->city,
-            'area_id' => $request->area,
-            'address' => $request->address,
             'password' => Hash::make($request->password),
         ])->assignRole('user');
+
+        $address = new Address;
+        $address->name = $user->name;
+        $address->user_id = $user->id;
+        $address->phone_number = $request->phone_number;
+        $address->email = $user->email;
+        $address->country_id = '128';
+        $address->city_id = $request->city;
+        $address->area_id = $request->area;
+        $address->street_address = $request->address;
+        $address->is_default = true;
+        $address->is_pickup = true;
+        $address->save();
 
         event(new Registered($user));
 
