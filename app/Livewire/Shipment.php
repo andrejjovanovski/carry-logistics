@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Area;
 use App\Models\City;
+use App\Models\Package;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -25,6 +26,34 @@ class Shipment extends Component
     ];
 
     public $totalPackages;
+
+    public $shipment_number;
+
+    public $pickup_date;
+
+    public $pickup_time_one;
+
+    public $pickup_time_two;
+
+    public $note_for_pickup_driver;
+
+    public $delivery_name;
+
+    public $delivery_email;
+
+    public $delivery_phone_number;
+
+    public $delivery_address;
+
+    public $delivery_note;
+
+    public $delivery_reference;
+
+    public $shipment_type_id;
+
+    public $payment_method_id;
+
+    public $pickup_address_id;
 
     public function updatedCityID(): void
     {
@@ -60,38 +89,8 @@ class Shipment extends Component
     public function deletePackage($index)
     {
         unset($this->packages[$index]);
-        array_values($this->packages);
+        $this->packages = array_values($this->packages); // Re-index the array
     }
-
-    //    public function rules()
-    //    {
-    //        $rules = [];
-    //
-    //        foreach ($this->packages as $index => $package) {
-    //            $rules["packages.{$index}.description"] = 'required|string|max:255';
-    //            $rules["packages.{$index}.weight"] = 'required|numeric|min:0';
-    //            $rules["packages.{$index}.length"] = 'required|numeric|min:0';
-    //            $rules["packages.{$index}.width"] = 'required|numeric|min:0';
-    //            $rules["packages.{$index}.height"] = 'required|numeric|min:0';
-    //        }
-    //
-    //        return $rules;
-    //    }
-    //
-    //    public function messages()
-    //    {
-    //        $messages = [];
-    //
-    //        foreach ($this->request->get('packages') as $index => $package) {
-    //            $messages["packages.{$index}.description"] = "Description for package #$index is required.";
-    //            $messages["weight{$index}.required"] = "Weight for package #$index is required.";
-    //            $messages["length{$index}.required"] = "Length for package #$index is required.";
-    //            $messages["width{$index}.required"] = "Width for package #$index is required.";
-    //            $messages["height{$index}.required"] = "Height for package #$index is required.";
-    //        }
-    //
-    //        return $messages;
-    //    }
 
     // Validation rules
     protected $rules = [
@@ -100,6 +99,15 @@ class Shipment extends Component
         'packages.*.length' => 'required|numeric|min:0',
         'packages.*.width' => 'required|numeric|min:0',
         'packages.*.height' => 'required|numeric|min:0',
+        'pickup_date' => 'bail|required|date',
+        'pickup_time_one' => 'bail|required',
+        'pickup_time_two' => 'bail|required',
+        'delivery_name' => 'bail|required',
+        'delivery_email' => 'email',
+        'delivery_phone_number' => 'bail|numeric',
+        'delivery_address' => 'bail|required|string',
+        //        'shipment_type_id' => 'bail|required',
+        //        'payment_method_id' => 'bail|required',
     ];
 
     // Validation messages
@@ -115,21 +123,46 @@ class Shipment extends Component
         'packages.*.height.numeric' => 'Height must be a number.',
     ];
 
-    // Save or submit method
     public function submit()
     {
         $this->validate();
 
-        // Handle form submission logic here
-    }
+        $uniqueString = generateUniqueString(16);
 
-    //    public function save() {
-    //        $this->validate();
-    //    }
-    //
-    //    public function updated($propertyName) {
-    //        $this->validateOnly($propertyName);
-    //    }
+        \App\Models\Shipment::create([
+            'user_id' => Auth::user()->id,
+            'shipment_number' => $uniqueString,
+            'pickup_address_id' => '1',
+            'delivery_name' => $this->delivery_name,
+            'delivery_email' => $this->delivery_email,
+            'delivery_phone_number' => $this->delivery_phone_number,
+            'delivery_country_id' => '128',
+            'delivery_city_id' => $this->cityID,
+            'delivery_area_id' => $this->areaID,
+            'delivery_address' => $this->delivery_address,
+            'delivery_note' => $this->delivery_note,
+            'delivery_reference' => $this->delivery_reference,
+            'pickup_date' => $this->pickup_date,
+            'pickup_time_one' => $this->pickup_time_one,
+            'pickup_time_two' => $this->pickup_time_two,
+            'note_for_pickup_driver' => $this->note_for_pickup_driver,
+            'shipment_type_id' => '1',
+            'payment_method_id' => '1',
+        ]);
+
+        foreach ($this->packages as $package) {
+            Package::create([
+                'shipment_id' => \App\Models\Shipment::latest()->first()->id,
+                'description' => $package['description'],
+                'weight' => $package['weight'],
+                'length' => $package['length'],
+                'width' => $package['width'],
+                'height' => $package['height'],
+            ]);
+        }
+
+        return redirect('/shipment');
+    }
 
     #[Layout('layouts.app')]
     public function render(): \Illuminate\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\View\View

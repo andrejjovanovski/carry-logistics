@@ -23,7 +23,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/shipment', [ShipmentController::class, 'index'])->name('shipment.index');
     Route::get('shipment/create', [ShipmentController::class, 'create'])->name('shipment.create');
-    Route::post('/shipment/store', [ShipmentController::class, 'store'])->name('shipment.store');
+    Route::post('/shipment/store', \App\Livewire\Shipment::class)->name('shipment.store');
 });
 
 require __DIR__.'/auth.php';

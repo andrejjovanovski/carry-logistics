@@ -2,20 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreShipmentRequest;
 use App\Http\Requests\UpdateShipmentRequest;
 use App\Models\Shipment;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request;
 
 class ShipmentController extends Controller
 {
-    public $contacts;
-
-    public function mount()
-    {
-        $contacts = Auth::user()->contacts;
-    }
-
     /**
      * Display a listing of the resource.
      */
@@ -37,11 +29,8 @@ class ShipmentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreShipmentRequest $request)
+    public function store(Request $request)
     {
-
-        Shipment::query()->create($request->all());
-
         return redirect()->route('shipment.index');
     }
 
