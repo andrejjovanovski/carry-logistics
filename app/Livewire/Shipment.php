@@ -125,7 +125,9 @@ class Shipment extends Component
 
     public function submit()
     {
-        $this->validate();
+        $this->validate([
+            $this->rules,
+        ]);
 
         $uniqueString = generateUniqueString(16);
 

@@ -19,9 +19,9 @@ return new class extends Migration
             $table->integer('length');
             $table->integer('width');
             $table->integer('height');
-            $table->boolean('dangerous_good');
-            $table->boolean('fragile_good');
-            $table->integer('un_number');
+            $table->boolean('dangerous_good')->nullable();
+            $table->boolean('fragile_good')->nullable();
+            $table->integer('un_number')->nullable();
             $table->timestamps();
         });
     }

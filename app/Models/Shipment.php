@@ -28,4 +28,12 @@ class Shipment extends Model
         'shipping_type_id',
         'payment_method_id',
     ];
+    public function packages()
+    {
+        return $this->hasMany(Package::class);
+    }
+    public function city()
+    {
+        return $this->belongsTo(City::class, 'delivery_city_id');
+    }
 }
