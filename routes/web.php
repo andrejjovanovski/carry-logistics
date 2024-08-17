@@ -23,11 +23,12 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/shipment', [ShipmentController::class, 'index'])->name('shipment.index');
     Route::get('shipment/create', [ShipmentController::class, 'create'])->name('shipment.create');
-    Route::post('/shipment/store',[ShipmentController::class, 'store'])->name('shipment.store');
+    Route::get('shipment/{shipment}/show', [ShipmentController::class, 'show'])->name('shipment.show');
+    Route::delete('shipment/{shipment}/destroy', [ShipmentController::class, 'destroy'])->name('shipment.destroy');
+    Route::post('/shipment/store', [ShipmentController::class, 'store'])->name('shipment.store');
 });
 
 Route::get('/api/cities/{city}/areas', [ShipmentController::class, 'getAreas']);
 Route::get('/api/areas/{area}/zipcode', [ShipmentController::class, 'getZipCode']);
-
 
 require __DIR__.'/auth.php';

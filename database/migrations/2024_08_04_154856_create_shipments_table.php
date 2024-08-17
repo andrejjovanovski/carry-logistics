@@ -30,7 +30,7 @@ return new class extends Migration
             $table->string('delivery_address');
             $table->string('delivery_note')->nullable();
             $table->foreignId('shipping_type_id')->constrained('shipping_types');
-            $table->foreignId('shipping_status_id')->nullable()->constrained('shipping_statuses');
+            $table->foreignId('shipping_status_id')->nullable()->default(1)->constrained('shipping_statuses');
             $table->foreignId('payment_method_id')->constrained('payment_methods');
             $table->foreignId('courier_id')->nullable()->constrained('users');
             $table->timestamps();

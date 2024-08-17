@@ -225,7 +225,9 @@
                         <x-input-label for='paymentMethod' :value="__('Payment method')"/>
                         <x-select id="paymentMethod" class="mt-1 w-full" name="payment_method_id">
                             <x-slot name="content" id="paymentMethod">
-                                <option value="1" selected>Cash</option>
+                                @foreach($paymentMethods as $method)
+                                    <option value="{{$method->id}}">{{$method->name}}</option>
+                                @endforeach
                             </x-slot>
                         </x-select>
                         <x-input-error :messages="$errors->get('payment_method_id')" class="mt-2"/>

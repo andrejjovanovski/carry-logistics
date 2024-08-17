@@ -6,6 +6,7 @@ use App\Http\Requests\UpdateShipmentRequest;
 use App\Models\Area;
 use App\Models\City;
 use App\Models\Package;
+use App\Models\PaymentMethod;
 use App\Models\Shipment;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
@@ -18,6 +19,7 @@ class ShipmentController extends Controller
     public $packages = [
         [],
     ];
+
     private int $totalPackages;
 
     /**
@@ -38,11 +40,14 @@ class ShipmentController extends Controller
     public function create()
     {
         $contacts = Auth::user()->addresses->where('is_pickup', true);
+        $paymentMethods = PaymentMethod::all();
+        //        dd($paymentMethods);
         $cities = City::all();
         $areas = Area::all();
         $totalPackages = $this->totalPackages = count($this->packages);
         $packages = $this->packages;
-        return view('shipment.create', compact('contacts', 'cities', 'areas', 'totalPackages', 'packages'));
+
+        return view('shipment.create', compact('contacts', 'cities', 'areas', 'totalPackages', 'packages', 'paymentMethods'));
     }
 
     /**
@@ -50,7 +55,7 @@ class ShipmentController extends Controller
      */
     public function store(Request $request)
     {
-//        dd($request->all());
+
         // Define validation rules for the fields, including dynamic package fields
         $rules = [
             'pickup_address_id' => 'required|exists:addresses,id',
@@ -73,9 +78,8 @@ class ShipmentController extends Controller
             'packages.*.description' => 'required|string|max:255',
         ];
 
-
         $request->validate($rules);
-        echo "here";
+
         $uniqueString = generateUniqueString(16);
         // Create the shipment record
         $shipment = Shipment::create([
@@ -85,7 +89,7 @@ class ShipmentController extends Controller
             'delivery_reference' => $request->delivery_reference,
             'pickup_date' => $request->pickup_date,
             'pickup_time' => "{$request->pickup_time_one} - {$request->pickup_time_two}",
-            'pickup_driver_note' => $request->pickup_driver_note,
+            'note_for_pickup_driver' => $request->pickup_driver_note,
             'delivery_name' => $request->delivery_name,
             'delivery_phone_number' => $request->delivery_phone_number,
             'delivery_country_id' => '128',
@@ -113,6 +117,7 @@ class ShipmentController extends Controller
                 'un_number' => 1,
             ]);
         }
+
         return redirect()->route('shipment.index');
     }
 
@@ -121,7 +126,11 @@ class ShipmentController extends Controller
      */
     public function show(Shipment $shipment)
     {
-        //
+
+        $shipment->load('country', 'city', 'area', 'packages', 'paymentMethod', 'pickupAddress');
+
+        //        dd($shipment);
+        return view('shipment.show', compact('shipment'));
     }
 
     /**
@@ -145,7 +154,10 @@ class ShipmentController extends Controller
      */
     public function destroy(Shipment $shipment)
     {
-        //
+
+        $shipment->delete();
+
+        return redirect()->route('shipment.index')->with('success', 'Shipment has been deleted');
     }
 
     public function getAreas(City $city)
